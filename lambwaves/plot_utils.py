@@ -39,7 +39,7 @@ def add_plot(ax, result, mode, fd, **plt_kwargs):
     # mode).
     
     if n == 1:
-        legend = 'Symmetric' if mode[0] == 'S' else 'Antisymmetric'
+        legend = 'Symmetrique' if mode[0] == 'S' else 'Antisymmetrique'
         mode_plot = ax.plot(fd, var, label=legend, **plt_kwargs)
         
         # Get the plot color so that the text indicating the mode is the 

@@ -30,17 +30,17 @@ Then, you can use this instance with the following methods:
 You can also use the following attributes:
     
     vp_sym:
-        Phase velocity interpolators for symmetric modes.
+        Phase velocity interpolators for symmetrique modes.
     vg_sym:
-        Group velocity interpolators for symmetric modes.
+        Group velocity interpolators for symmetrique modes.
     k_sym:
-        Wavenumber interpolators for symmetric modes.
+        Wavenumber interpolators for symmetrique modes.
     vp_antisym:
-        Phase velocity interpolators for antisymmetric modes.
+        Phase velocity interpolators for antisymmetrique modes.
     vg_antisym:
-        Group velocity interpolators for antisymmetric modes.
+        Group velocity interpolators for antisymmetrique modes.
     k_antisym:
-       Wavenumber interpolators for antisymmetric modes.
+       Wavenumber interpolators for antisymmetrique modes.
 
 For example, if you need the phase velocity for the S0 mode at 1000 
 kHz × mm, you can do:
@@ -105,22 +105,22 @@ class Lamb:
     Attributes
     ----------
     vp_sym:
-        Dictionary with phase velocity interpolators for symmetric 
+        Dictionary with phase velocity interpolators for symmetrique 
         modes.
     vg_sym:
-        Dictionary with group velocity interpolators for symmetric 
+        Dictionary with group velocity interpolators for symmetrique 
         modes.
     k_sym:
-        Dictionary with wavenumber interpolators for symmetric 
+        Dictionary with wavenumber interpolators for symmetrique 
         modes.
     vp_antisym:
-        Dictionary with phase velocity interpolators for antisymmetric 
+        Dictionary with phase velocity interpolators for antisymmetrique 
         modes.
     vg_antisym:
-        Dictionary with group velocity interpolators for antisymmetric 
+        Dictionary with group velocity interpolators for antisymmetrique 
         modes.
     k_antisym:
-       Dictionary with wavenumber interpolators for antisymmetric 
+       Dictionary with wavenumber interpolators for antisymmetrique 
        modes.
        
     """
@@ -146,9 +146,9 @@ class Lamb:
         thickness : float or int
             Thickness of the plate, in mm.
         nmodes_sym : int
-            Number of symmetric modes to calculate.
+            Number of symmetrique modes to calculate.
         nmodes_antisym : int
-            Number of antisymmetric modes to calculate.
+            Number of antisymmetrique modes to calculate.
         fd_max : float or int
             Maximum value of frequency × thickness to calculate.
         vp_max : float or int
@@ -183,12 +183,12 @@ class Lamb:
         
         # Solve the dispersion equations.
         
-        sym = self._solve_disp_eqn(function=self._symmetric, 
+        sym = self._solve_disp_eqn(function=self._symmetrique, 
                                    nmodes=nmodes_sym, 
                                    c=c_S, 
                                    label='S')
         
-        antisym = self._solve_disp_eqn(function=self._antisymmetric, 
+        antisym = self._solve_disp_eqn(function=self._antisymmetrique, 
                                        nmodes=nmodes_antisym, 
                                        c=c_L, 
                                        label='A')
@@ -231,8 +231,8 @@ class Lamb:
 
         return k, p, q
 
-    def _symmetric(self, vp, fd):
-        """Rayleigh-Lamb frequency relation for symmetric modes, used to 
+    def _symmetrique(self, vp, fd):
+        """Rayleigh-Lamb frequency relation for symmetrique modes, used to 
         determine the velocity at which a wave of a particular frequency 
         will propagate within the plate. The roots of this equation are 
         used to generate the dispersion curves.
@@ -246,20 +246,20 @@ class Lamb:
         
         Returns
         -------
-        symmetric : float
-            Dispersion relation for symmetric modes.
+        symmetrique : float
+            Dispersion relation for symmetrique modes.
         
         """
         
         k, p, q = self._calc_constants(vp, fd)
     
-        symmetric = (np.tan(q*self.h)/q
+        symmetrique = (np.tan(q*self.h)/q
                      + (4*(k**2)*p*np.tan(p*self.h))/(q**2 - k**2)**2)
 
-        return np.real(symmetric)
+        return np.real(symmetrique)
         
-    def _antisymmetric(self, vp, fd):
-        """Rayleigh-Lamb frequency relation for antisymmetric modes, 
+    def _antisymmetrique(self, vp, fd):
+        """Rayleigh-Lamb frequency relation for antisymmetrique modes, 
         used to determine the velocity at which a wave of a particular 
         frequency will propagate within the plate. The roots of this 
         equation are used to generate the dispersion curves.
@@ -273,17 +273,17 @@ class Lamb:
             
         Returns
         -------
-        antisymmetric : float
-            Dispersion relation for antisymmetric modes.
+        antisymmetrique : float
+            Dispersion relation for antisymmetrique modes.
             
         """
         
         k, p, q = self._calc_constants(vp, fd)
 
-        antisymmetric = (q * np.tan(q*self.h)
+        antisymmetrique = (q * np.tan(q*self.h)
                          + (((q**2 - k**2)**2)*np.tan(p*self.h))/(4*(k**2)*p))
 
-        return np.real(antisymmetric)
+        return np.real(antisymmetrique)
     
     def _calc_wave_structure(self, modes, vp, fd, y):
         """Calculate the wave structure across the thickness of the 
@@ -292,8 +292,8 @@ class Lamb:
         Parameters
         ----------
         modes : {'A', 'S'}
-            Family of modes to analyze. Can be 'A' (antisymmetric modes) 
-            or 'S' (symmetric modes).
+            Family of modes to analyze. Can be 'A' (antisymmetrique modes) 
+            or 'S' (symmetrique modes).
         vp : float or int
             Phase velocity.
         fd : float or int
@@ -346,17 +346,17 @@ class Lamb:
 
         Parameters
         ----------
-        function : {self._symmetric, self._antisymmetric}
-            Family of modes to solve. Can be `self._symmetric` (to solve 
-            symmetric modes) or `self._antisymmetric` (to solve 
-            antisymmetric modes).
+        function : {self._symmetrique, self._antisymmetrique}
+            Family of modes to solve. Can be `self._symmetrique` (to solve 
+            symmetrique modes) or `self._antisymmetrique` (to solve 
+            antisymmetrique modes).
             
         Returns
         -------
         result_dict : dict
             A dictionary, where the keys are the corresponding mode 
-            (e.g., 'A0', 'A1', 'A2', ..., 'An' for antisymmetric modes 
-             or 'S0', 'S1', 'S2', ..., 'Sn' for symmetric modes) and the 
+            (e.g., 'A0', 'A1', 'A2', ..., 'An' for antisymmetrique modes 
+             or 'S0', 'S1', 'S2', ..., 'Sn' for symmetrique modes) and the 
             values are numpy arrays of dimensions (2, fd_points), where 
             the first row has the fd values and the second row has the 
             phase velocity values calculated.
@@ -565,8 +565,8 @@ class Lamb:
     
     def plot(self, ax, result, y_max, cutoff_frequencies=False, 
              arrow_dir=None, material_velocities=False, plt_kwargs={}):
-        """Generate a dispersion plot for a family of modes (symmetric
-        or antisymmetric).
+        """Generate a dispersion plot for a family of modes (symmetrique
+        or antisymmetrique).
         
         Parameters
         ----------
@@ -620,9 +620,9 @@ class Lamb:
         
         Parameters
         ----------
-        modes : {'both', 'symmetric', 'antisymmetric'}, optional
-            Which family of modes to plot. Can be 'symmetric', 
-            'antisymmetric' or 'both'. Defaults to 'both'.
+        modes : {'both', 'symmetrique', 'antisymmetrique'}, optional
+            Which family of modes to plot. Can be 'symmetrique', 
+            'antisymmetrique' or 'both'. Defaults to 'both'.
         cutoff_frequencies : bool, optional
             Add cutoff frequencies to the plot. Defaults to True.
         material_velocities : bool, optional
@@ -631,11 +631,11 @@ class Lamb:
         save_img : bool, optional
             Save the result image as png. Defaults to False.
         sym_style : dict, optional
-            A dictionary with matplotlib kwargs to modify the symmetric 
+            A dictionary with matplotlib kwargs to modify the symmetrique 
             curves (to change color, linewidth, linestyle, etc.).
         antisym_style : dict, optional
             A dictionary with matplotlib kwargs to modify the 
-            antisymmetric curves (to change color, linewidth, linestyle, 
+            antisymmetrique curves (to change color, linewidth, linestyle, 
             etc.).
             
         Returns
@@ -652,10 +652,10 @@ class Lamb:
         
         max_sym, max_antisym = find_max(self.vp_sym), find_max(self.vp_antisym)
         
-        if modes == 'symmetric':
+        if modes == 'symmetrique':
             self.plot(ax, self.vp_sym, max_sym, cutoff_frequencies, 'down', 
                       material_velocities, plt_kwargs=sym_style)
-        elif modes == 'antisymmetric':
+        elif modes == 'antisymmetrique':
             self.plot(ax, self.vp_antisym, max_antisym, cutoff_frequencies, 
                       'down', material_velocities, plt_kwargs=antisym_style)
         elif modes == 'both':
@@ -665,7 +665,7 @@ class Lamb:
             self.plot(ax, self.vp_antisym, max_, cutoff_frequencies, 
                       'down', material_velocities, plt_kwargs=antisym_style)
         else:
-            raise Exception('modes must be "symmetric", "antisymmetric"'
+            raise Exception('modes must be "symmetrique", "antisymmetrique"'
                             'or "both".') 
             
         ax.legend(loc='lower right')
@@ -686,19 +686,19 @@ class Lamb:
         
         Parameters
         ----------
-        modes : {'both', 'symmetric', 'antisymmetric'}, optional
-            Which family of modes to plot. Can be 'symmetric', 
-            'antisymmetric' or 'both'. Defaults to 'both'.
+        modes : {'both', 'symmetrique', 'antisymmetrique'}, optional
+            Which family of modes to plot. Can be 'symmetrique', 
+            'antisymmetrique' or 'both'. Defaults to 'both'.
         cutoff_frequencies : bool, optional
             Add cutoff frequencies to the plot. Defaults to True.
         save_img : bool, optional
             Save the result image as png. Defaults to False.            
         sym_style : dict, optional
-            A dictionary with matplotlib kwargs to modify the symmetric 
+            A dictionary with matplotlib kwargs to modify the symmetrique 
             curves (to change color, linewidth, linestyle, etc.).
         antisym_style : dict, optional
             A dictionary with matplotlib kwargs to modify the 
-            antisymmetric curves (to change color, linewidth, linestyle, 
+            antisymmetrique curves (to change color, linewidth, linestyle, 
             etc.).
             
         Returns
@@ -715,10 +715,10 @@ class Lamb:
         
         max_sym, max_antisym = find_max(self.vg_sym), find_max(self.vg_antisym)
     
-        if modes == 'symmetric':
+        if modes == 'symmetrique':
             self.plot(ax, self.vg_sym, max_sym, cutoff_frequencies, 
                       'up', plt_kwargs=sym_style)
-        elif modes == 'antisymmetric':
+        elif modes == 'antisymmetrique':
             self.plot(ax, self.vg_antisym, max_antisym, cutoff_frequencies, 
                       'up', plt_kwargs=antisym_style)
         elif modes == 'both':
@@ -728,7 +728,7 @@ class Lamb:
             self.plot(ax, self.vg_antisym, max_, cutoff_frequencies, 
                       'up', plt_kwargs=antisym_style)
         else:
-            raise Exception('modes must be "symmetric", "antisymmetric"'
+            raise Exception('modes must be "symmetrique", "antisymmetrique"'
                             'or "both".')  
              
         ax.legend(loc='lower right')
@@ -749,17 +749,17 @@ class Lamb:
         
         Parameters
         ----------
-        modes : {'both', 'symmetric', 'antisymmetric'}, optional
-            Which family of modes to plot. Can be 'symmetric', 
-            'antisymmetric' or 'both'. Defaults to 'both'.
+        modes : {'both', 'symmetrique', 'antisymmetrique'}, optional
+            Which family of modes to plot. Can be 'symmetrique', 
+            'antisymmetrique' or 'both'. Defaults to 'both'.
         save_img : bool, optional
             Save the result image as png. Defaults to False.                  
         sym_style : dict, optional
-            A dictionary with matplotlib kwargs to modify the symmetric 
+            A dictionary with matplotlib kwargs to modify the symmetrique 
             curves (to change color, linewidth, linestyle, etc.).
         antisym_style : dict, optional
             A dictionary with matplotlib kwargs to modify the 
-            antisymmetric curves (to change color, linewidth, linestyle, 
+            antisymmetrique curves (to change color, linewidth, linestyle, 
             etc.).
             
         Returns
@@ -776,16 +776,16 @@ class Lamb:
         
         max_sym, max_antisym = find_max(self.k_sym), find_max(self.k_antisym)
 
-        if modes == 'symmetric':
+        if modes == 'symmetrique':
             self.plot(ax, self.k_sym, max_sym, plt_kwargs=sym_style)
-        elif modes == 'antisymmetric':
+        elif modes == 'antisymmetrique':
             self.plot(ax, self.k_antisym, max_antisym, plt_kwargs=antisym_style)
         elif modes == 'both':
             max_ = max(max_sym, max_antisym)
             self.plot(ax, self.k_sym, max_, plt_kwargs=sym_style)
             self.plot(ax, self.k_antisym, max_, plt_kwargs=antisym_style)
         else:
-            raise Exception('modes must be "symmetric", "antisymmetric"'
+            raise Exception('modes must be "symmetrique", "antisymmetrique"'
                             'or "both".') 
             
         ax.legend(loc='upper left')

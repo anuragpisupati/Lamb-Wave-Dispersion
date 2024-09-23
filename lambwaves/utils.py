@@ -87,7 +87,7 @@ def correct_instability(result, function):
         velocity values for the requested modes (S0, S1, S2, etc., or 
         A0, A1, A2, etc.)
     function : object
-        Family of modes to solve (symmetric or antisymmetric).
+        Family of modes to solve (symmetrique or antisymmetrique).
         
     Returns
     -------
@@ -96,9 +96,9 @@ def correct_instability(result, function):
         
     """
     
-    # Compensate for antisymmetric mode (A0 is strictly increasing).
+    # Compensate for antisymmetrique mode (A0 is strictly increasing).
     
-    n = 1 if function.__name__ == '_symmetric' else 2
+    n = 1 if function.__name__ == '_symmetrique' else 2
     nmodes = result.shape[1] - 1
 
     corr = np.copy(result)
@@ -144,10 +144,10 @@ def write_txt(data_sym, data_antisym, kind, filename, header):
     ----------
     data_sym : dict
         A dictionary consisting of interpolators for the specified 
-        symmetric modes.
+        symmetrique modes.
     data_antisym : dict
         A dictionary consisting of interpolators for the specified 
-        antisymmetric modes.
+        antisymmetrique modes.
     kind : {'Phase Velocity', 'Group Velocity', 'Wavenumber'}
         The type of results to write. Can be 'Phase Velocity', 'Group
         Velocity' or 'Wavenumber'.
